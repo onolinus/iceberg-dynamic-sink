@@ -1,0 +1,44 @@
+version: "3.8"
+
+# =============================================================================
+# Lakehouse Dynamic Sink — LOCAL DEVELOPMENT ONLY
+#
+# All production services (Kafka, Hive Metastore, OSS, Flink) are external.
+# This file is ONLY needed if you want a local Kafka for development testing.
+#
+# Production infra (no Docker needed):
+#   Kafka         : <your-kafka-broker>:9092
+#   Hive Metastore: thrift://<your-metastore-host>:9083
+#   Warehouse     : oss://<your-bucket>.<your-region>.oss-dls.aliyuncs.com/...
+#   Flink cluster : already running (use `flink run` to submit jobs)
+#
+# To use: uncomment the services below, then run `docker compose up -d`
+# =============================================================================
+
+networks:
+  lakehouse-net:
+    driver: bridge
+
+services:
+
+  # Local Kafka for dev/testing only — comment out when using prod Kafka
+  # zookeeper:
+  #   image: confluentinc/cp-zookeeper:7.7.0
+  #   container_name: zookeeper
+  #   networks: [lakehouse-net]
+  #   environment:
+  #     ZOOKEEPER_CLIENT_PORT: 2181
+
+  # kafka:
+  #   image: confluentinc/cp-kafka:7.7.0
+  #   container_name: kafka
+  #   networks: [lakehouse-net]
+  #   depends_on: [zookeeper]
+  #   ports:
+  #     - "9092:9092"
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
